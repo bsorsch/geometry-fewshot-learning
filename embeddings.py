@@ -73,6 +73,7 @@ def show_grid(im_tensor, nrow=8, title=None):
     plt.title(title)
 
 
+
 ## Model
 model_name = args.model
 repo = 'pytorch/vision:v0.6.0'
@@ -80,7 +81,8 @@ model = torch.hub.load(repo, model_name, pretrained=True)
 model_dir = os.path.join(emb_path,model_name)
 
 # Remove readout layer
-if 'resnet' in model_name:
+fc_models = ['resnet','resnext','google','dense','inception']
+if np.any([fcm in model_name for fcm in fc_models if fcm]):
     model.fc = torch.nn.Sequential()
 else:
     list(model.children())[-1][-1] = torch.nn.Sequential()
@@ -104,7 +106,6 @@ if N > 2048:
     U = U.cuda()
 else:
     random_projection=False
-
 
 
 P = 500
