@@ -77,11 +77,12 @@ def show_grid(im_tensor, nrow=8, title=None):
 ## Model
 model_name = args.model
 repo = 'pytorch/vision:v0.6.0'
+# repo = 'rwightman/gen-efficientnet-pytorch'
 model = torch.hub.load(repo, model_name, pretrained=True)
 model_dir = os.path.join(emb_path,model_name)
 
 # Remove readout layer
-fc_models = ['resnet','resnext','google','dense','inception']
+fc_models = ['resnet','resnext','google','dense','inception','efficient']
 if np.any([fcm in model_name for fcm in fc_models if fcm]):
     model.fc = torch.nn.Sequential()
 else:
