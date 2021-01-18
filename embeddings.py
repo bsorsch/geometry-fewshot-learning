@@ -1,5 +1,5 @@
 """
-Extract embeddings in the feature layer of trained CNNs, for 100 images from the ImageNet21k dataset.
+Extract embeddings in the feature layer of trained CNNs, for objects from the ImageNet21k dataset.
 
 """
 

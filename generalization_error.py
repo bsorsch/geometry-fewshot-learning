@@ -1,3 +1,8 @@
+"""
+Compute generalization error of prototype few-shot learning.
+
+"""
+
 from jax import numpy as np
 from jax import jit
 from jax import random
@@ -27,7 +32,9 @@ os.environ["CUDA_VISIBLE_DEVICES"]=str(args.gpu)
 model_name = args.model
 emb_path = '/mnt/fs2/bsorsch/manifold/embeddings_new/1k_objects'
 model_dir = os.path.join(emb_path,model_name)
+save_path = os.path.join(model_dir,'errs_{}shot.npy'.format(m))
 print('Computing generalization error for ' + str(model_name))
+print('Saving to: ' + save_path)
 
 # Load manifolds
 manifolds_load = np.load(os.path.join(model_dir, 'manifolds.npy'),allow_pickle=True)
@@ -166,13 +173,13 @@ for ii,a in enumerate(range(K)):
         errs_a.append(erra)
         errs_b.append(errb)
 
-    print(str(ii) + '. Avg. acc.: ' + str(1-errs_a[-1].mean()))
+    print('Manifold {} of {}. Avg. acc: {}'.format(ii,K,1-errs_a[-1].mean()))
 
 # Combine errs_a and errs_b into K x K matrix
 errs_full = np.triu(squareform(errs_a)) + np.tril(squareform(errs_b))
 
 # Save
-np.save(os.path.join(model_dir,'errs_{}shot.npy'.format(m)),errs_full)
+np.save(save_path,errs_full)
 print('Finished with acc. ' + str(1 - np.mean(errs_full)) + '. Saved.')
 
 
